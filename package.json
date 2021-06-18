@@ -8,9 +8,30 @@
     "start": "next start"
   },
   "dependencies": {
+    "@headlessui/react": "^1.2.0",
+    "@heroicons/react": "^1.0.1",
+    "@stripe/react-stripe-js": "^1.4.1",
+    "@stripe/stripe-js": "^1.15.0",
+    "@tailwindcss/aspect-ratio": "^0.2.1",
+    "@tailwindcss/forms": "^0.3.3",
+    "@woocommerce/eslint-plugin": "^1.2.0",
+    "@wordpress/api-fetch": "^5.1.1",
+    "@wordpress/components": "^14.1.2",
+    "@wp-g2/components": "^0.0.164",
+    "axios": "^0.21.1",
+    "changecase-objects": "^1.1.0",
+    "eventemitter3": "^4.0.7",
+    "formik": "^2.2.9",
+    "immer": "^9.0.3",
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "next": "latest",
+    "promise-events": "^0.2.4",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "react-number-format": "^4.6.3",
+    "react-query": "^3.16.1",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.4",
