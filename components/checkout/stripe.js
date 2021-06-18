@@ -9,9 +9,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { axios, Emitter } from '../../utils';
 import { useQueryClient } from 'react-query';
 
-const promise = loadStripe(
-	'pk_test_51HWj7AEtLFnZrPHD2leaTB9x9qG8mjRVW8peu3kbT8WcUuxxkANzAQfKwYJzRa0F4MOG66aZI4zwUOBetfkC1Tkg00oeP0lVFh'
-);
+const promise = loadStripe( process.env.NEXT_PUBLIC_STRIPE_PUBLIC );
 
 export default function StripeWrapper() {
 	return (
