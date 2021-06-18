@@ -58,7 +58,7 @@ export function Cart( { open, setOpen } ) {
 												</Dialog.Title>
 												<div className="ml-3 h-7 flex items-center">
 													<button
-														className="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+														className="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
 														onClick={ () =>
 															setOpen( false )
 														}

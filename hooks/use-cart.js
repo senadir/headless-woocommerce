@@ -7,7 +7,12 @@ export const useCart = () => {
 		data: cart,
 		isLoading: cartIsLoading,
 		isSuccess: cartLoaded,
-	} = useQuery( 'cart', getCart );
+	} = useQuery( 'cart', getCart, {
+		refetchOnReconnect: false,
+		refetchOnWindowFocus: false,
+		refetchOnMount: false,
+		refetchIntervalInBackground: false,
+	} );
 
 	return { ...camelCase( cart ), cartIsLoading, cartLoaded };
 };

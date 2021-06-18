@@ -1,13 +1,22 @@
-import { useProducts, getProducts } from '../hooks';
-import { QueryClient } from 'react-query';
+import { useProducts, getProducts } from '../../hooks';
+import { QueryClient, useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import { dehydrate } from 'react-query/hydration';
-import { Product } from '../components';
+import { Product } from '../../components';
 import Link from 'next/link';
+import { axios } from '../../utils';
+import classnames from 'classnames';
 
 export default function Home() {
-	const { products } = useProducts();
+	const {
+		query: { slug },
+		isFallback,
+	} = useRouter();
+	const { products } = useProducts( `category=${ slug[ 1 ] }` );
 	const { push } = useRouter();
+	if ( ! products ) {
+		return null;
+	}
 	return (
 		<ul className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
 			{ products.map( ( product ) => (
@@ -46,12 +55,29 @@ export default function Home() {
 	);
 }
 
-export async function getStaticProps() {
+export async function getStaticProps( { params } ) {
+	console.log( params );
 	const queryClient = new QueryClient();
-	await queryClient.prefetchQuery( 'products', getProducts );
+	await queryClient.prefetchQuery(
+		[ 'products', { category: params.slug[ 1 ] } ],
+		() => getProducts( `category=${ params.slug[ 1 ] }` )
+	);
 	return {
 		props: {
 			dehydratedState: dehydrate( queryClient ),
 		},
+	};
+}
+
+export async function getStaticPaths() {
+	const { data: categories } = await axios.get( `products/categories` );
+	console.log(
+		categories.map( ( category ) => [ category.slug, category.id ] )
+	);
+	return {
+		paths: categories.map( ( category ) => ( {
+			params: { slug: [ category.slug, `${ category.id }` ] },
+		} ) ),
+		fallback: false, // See the "fallback" section below
 	};
 }

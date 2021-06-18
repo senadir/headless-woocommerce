@@ -20,6 +20,7 @@
     "@wp-g2/components": "^0.0.164",
     "axios": "^0.21.1",
     "changecase-objects": "^1.1.0",
+    "classnames": "^2.2.6",
     "eventemitter3": "^4.0.7",
     "formik": "^2.2.9",
     "immer": "^9.0.3",

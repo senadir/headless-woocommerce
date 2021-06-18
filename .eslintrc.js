@@ -7,5 +7,6 @@ module.exports = {
 		camelcase: 'off',
 		'jsx-a11y/autocomplete-valid': 'off',
 		'no-nested-ternary': 'off',
+		'jsx-a11y/anchor-is-valid': 'off',
 	},
 };

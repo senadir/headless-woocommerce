@@ -1,30 +1,64 @@
-import React from 'react';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { axios, Emitter } from '../utils';
-export default function useCheckout() {
-	const { data: checkout } = useQuery( 'checkout', () =>
-		axios.get( 'checkout' ).then( ( { data } ) => data )
+export const useCheckout = () => {
+	const queryClient = useQueryClient();
+	const { data: checkout } = useQuery(
+		'checkout',
+		() => axios.get( 'checkout' ).then( ( { data } ) => data ),
+		{
+			refetchOnReconnect: false,
+			refetchOnWindowFocus: false,
+			refetchOnMount: false,
+			refetchIntervalInBackground: false,
+		}
 	);
-	const { mutate: placeOrder } = useMutation(
+	const { mutateAsync: placeOrder, error: placeErrors } = useMutation(
 		async ( { values: { billing_address, shipping_address } } ) => {
-			const [ stripe ] = await Emitter.emit( 'submit' );
-			axios.post( 'checkout', {
+			try {
+				const [ stripe ] = await Emitter.emit( 'submit' );
+				await axios.post( 'checkout', {
+					billing_address: {
+						...billing_address,
+						...shipping_address,
+					},
+					shipping_address: {
+						...shipping_address,
+					},
+					payment_data: stripe,
+					payment_method: 'basic-stripe',
+				} );
+			} catch ( e ) {
+				console.log( e );
+			}
+		},
+		{
+			onSuccess: ( { data } ) => {
+				queryClient.setQueryData( 'checkout', data );
+				queryClient.removeQueries( 'cart' );
+			},
+		}
+	);
+
+	const { mutateAsync: updateCheckout, error: updateErrors } = useMutation(
+		async ( { values: { billing_address, shipping_address } } ) => {
+			return axios.post( 'cart/update-customer', {
 				billing_address: {
 					...billing_address,
 					...shipping_address,
-					state: 'DZ-31',
 				},
 				shipping_address: {
 					...shipping_address,
-					state: 'DZ-31',
 				},
-				payment_data: stripe,
-				payment_method: 'basic-stripe',
 			} );
+		},
+		{
+			onSuccess: ( { data } ) => queryClient.setQueryData( 'cart', data ),
 		}
 	);
 	return {
 		...checkout,
 		placeOrder,
+		updateCheckout,
+		errors: { ...placeErrors, ...updateErrors },
 	};
-}
+};

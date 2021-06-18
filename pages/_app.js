@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { Disclosure, Menu, Transition } from '@headlessui/react';
+import { Disclosure } from '@headlessui/react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
 import 'tailwindcss/tailwind.css';
@@ -7,10 +9,10 @@ import { Cart } from '../components';
 import OpenCartButton from '../components/cart/open-cart-button';
 
 const navigation = [
-	{ name: 'Dashboard', href: '#', current: true },
-	{ name: 'Team', href: '#', current: false },
-	{ name: 'Projects', href: '#', current: false },
-	{ name: 'Calendar', href: '#', current: false },
+	{ name: 'All Products', href: '/' },
+	{ name: 'Accessories', href: '/category/accessories/19' },
+	{ name: 'Music', href: '/category/music/20' },
+	{ name: 'Checkout', href: '/checkout' },
 ];
 
 function classNames( ...classes ) {
@@ -20,6 +22,7 @@ function classNames( ...classes ) {
 function MyApp( { Component, pageProps } ) {
 	const [ queryClient ] = useState( () => new QueryClient() );
 	const [ cartIsOpen, setCartIsOpen ] = useState( false );
+	const { asPath } = useRouter();
 	return (
 		<QueryClientProvider client={ queryClient }>
 			<Hydrate state={ pageProps.dehydratedState }>
@@ -36,34 +39,39 @@ function MyApp( { Component, pageProps } ) {
 											<div className="flex-shrink-0 flex items-center">
 												<img
 													className="block lg:hidden h-8 w-auto"
-													src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-													alt="Workflow"
+													src="https://woocommerce.com/wp-content/themes/woo/images/logo-woocommerce.svg"
+													alt="WooCommerce"
 												/>
 												<img
 													className="hidden lg:block h-8 w-auto"
-													src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
-													alt="Workflow"
+													src="https://woocommerce.com/wp-content/themes/woo/images/logo-woocommerce.svg"
+													alt="WooCommerce"
 												/>
 											</div>
 											<div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
 												{ navigation.map( ( item ) => (
-													<a
+													<Link
 														key={ item.name }
 														href={ item.href }
-														className={ classNames(
-															item.current
-																? 'border-indigo-500 text-gray-900'
-																: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-															'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium'
-														) }
-														aria-current={
-															item.current
-																? 'page'
-																: undefined
-														}
 													>
-														{ item.name }
-													</a>
+														<a
+															className={ classNames(
+																item.href ===
+																	asPath
+																	? 'border-purple-500 text-gray-900'
+																	: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+																'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium'
+															) }
+															aria-current={
+																item.href ===
+																asPath
+																	? 'page'
+																	: undefined
+															}
+														>
+															{ item.name }
+														</a>
+													</Link>
 												) ) }
 											</div>
 										</div>

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useShippingRates } from '../../hooks';
+import { useShippingRates, useCart } from '../../hooks';
 import { RadioGroup } from '@headlessui/react';
 import { formatPrice, getCurrencyFromPriceResponse } from '../../utils';
 import { useFormikContext } from 'formik';
@@ -9,6 +9,7 @@ function classNames( ...classes ) {
 }
 
 export default function ShippingMethods() {
+	const { hasCalculatedShipping } = useCart();
 	const { selectRate, shippingMethods } = useShippingRates();
 	const { setFieldValue } = useFormikContext();
 	const handleChange = useCallback(
@@ -18,6 +19,9 @@ export default function ShippingMethods() {
 		},
 		[ setFieldValue, selectRate ]
 	);
+	if ( ! hasCalculatedShipping ) {
+		return null;
+	}
 	return (
 		<RadioGroup
 			value={ shippingMethods.find( ( rate ) => rate.selected ).rateId }
@@ -32,7 +36,7 @@ export default function ShippingMethods() {
 						className={ ( { active } ) =>
 							classNames(
 								active
-									? 'ring-1 ring-offset-2 ring-indigo-500'
+									? 'ring-1 ring-offset-2 ring-purple-500'
 									: '',
 								'relative block rounded-lg border border-gray-300 bg-white shadow-sm px-6 py-4 cursor-pointer hover:border-gray-400 sm:flex sm:justify-between focus:outline-none'
 							)
@@ -70,7 +74,7 @@ export default function ShippingMethods() {
 								<div
 									className={ classNames(
 										checked
-											? 'border-indigo-500'
+											? 'border-purple-500'
 											: 'border-transparent',
 										'absolute -inset-px rounded-lg border-2 pointer-events-none'
 									) }

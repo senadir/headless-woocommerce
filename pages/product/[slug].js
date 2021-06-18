@@ -3,7 +3,7 @@ import { QueryClient, useQuery } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 import { Product } from '../../components';
 import { axios } from '../../utils';
-
+import classnames from 'classnames';
 export default function ProductPage() {
 	const {
 		query: { slug },
@@ -21,6 +21,7 @@ export default function ProductPage() {
 	if ( isFallback ) {
 		return 'Loading...';
 	}
+	console.log( product.type !== 'simple' );
 	return (
 		<Product product={ product } className="relative">
 			<div className="mx-auto max-w-7xl w-full pt-16 pb-20 text-center lg:py-48 lg:text-left">
@@ -32,7 +33,29 @@ export default function ProductPage() {
 
 					<Product.Description className="mt-3 max-w-md mx-auto text-lg text-gray-500 sm:text-xl md:mt-5 md:max-w-3xl" />
 
-					<Product.AddToCart className="mt-4 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:py-4 md:text-lg md:px-10" />
+					<Product.AddToCart
+						className={ classnames(
+							'mt-4 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 md:py-4 md:text-lg md:px-10',
+							{
+								'bg-gray-400 hover:bg-gray-400 focus:ring-transparent pointer-events-none':
+									product.type !== 'simple',
+							}
+						) }
+						override={ {
+							add_to_cart: ( add_to_cart, { type } ) => {
+								if ( type !== 'simple' ) {
+									return {
+										text:
+											'The demo only supports adding simple products',
+									};
+								}
+								return add_to_cart;
+							},
+						} }
+						onClick={ ( onClick ) =>
+							product.type === 'simple' && onClick()
+						}
+					/>
 				</div>
 			</div>
 			<div className="relative w-full h-64 sm:h-72 md:h-96 lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 lg:h-full">

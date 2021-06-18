@@ -1,14 +1,18 @@
 import { useQuery } from 'react-query';
 import { axios } from '../utils';
 
-export const useProducts = () => {
-	const { data: products } = useQuery( 'products', getProducts );
+export const useProducts = ( queryString ) => {
+	const { data: products } = useQuery( 'products', () =>
+		getProducts( queryString )
+	);
 	return {
 		products,
 	};
 };
 
-export const getProducts = async () => {
-	const { data: products } = await axios.get( `products` );
+export const getProducts = async ( queryString ) => {
+	const { data: products } = await axios.get(
+		`products?per_page=0&${ queryString }`
+	);
 	return products;
 };

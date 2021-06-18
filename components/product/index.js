@@ -121,19 +121,25 @@ const Price = ( { override = {}, className, ...rest } ) => {
 		</p>
 	);
 };
-const AddToCart = ( { override = {}, className, ...rest } ) => {
-	const { add_to_cart, id, quantity } = useProduct( override );
+const AddToCart = ( {
+	override = {},
+	className,
+	onClick = ( cb ) => cb(),
+	...rest
+} ) => {
+	const { add_to_cart, id } = useProduct( override );
 	const { addItem, isLoading } = useAddItem();
 	const handleAddToCart = useCallback( () => {
 		addItem( id );
-	}, [ id ] );
+	}, [ id, addItem ] );
 	return (
 		<button
 			className={ `${ className } ${
 				isLoading && 'bg-gray-200 hover:bg-gray-200 pointer-events-none'
 			}` }
-			onClick={ handleAddToCart }
+			onClick={ () => onClick( handleAddToCart ) }
 			disabled={ isLoading }
+			{ ...rest }
 		>
 			{ add_to_cart.text }
 		</button>

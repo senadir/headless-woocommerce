@@ -38,7 +38,7 @@ export const useShippingRates = () => {
 				queryClient.setQueryData( 'cart', cart ),
 		}
 	);
-	const shippingMethods = shippingRates[ 0 ].shippingRates;
+	const shippingMethods = shippingRates[ 0 ]?.shippingRates;
 
 	return {
 		selectRate,
