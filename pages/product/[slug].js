@@ -71,6 +71,7 @@ export async function getStaticProps( { params } ) {
 		props: {
 			dehydratedState: dehydrate( queryClient ),
 		},
+		revalidate: 10,
 	};
 }
 
@@ -81,6 +82,6 @@ export async function getStaticPaths() {
 		paths: products.map( ( product ) => ( {
 			params: { slug: product.slug },
 		} ) ),
-		fallback: false, // See the "fallback" section below
+		fallback: 'blocking', // See the "fallback" section below
 	};
 }

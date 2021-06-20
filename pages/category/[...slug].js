@@ -65,6 +65,7 @@ export async function getStaticProps( { params } ) {
 		props: {
 			dehydratedState: dehydrate( queryClient ),
 		},
+		revalidate: 10,
 	};
 }
 
@@ -75,6 +76,6 @@ export async function getStaticPaths() {
 		paths: categories.map( ( category ) => ( {
 			params: { slug: [ category.slug, `${ category.id }` ] },
 		} ) ),
-		fallback: false, // See the "fallback" section below
+		fallback: 'blocking', // See the "fallback" section below
 	};
 }
