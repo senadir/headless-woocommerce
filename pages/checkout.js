@@ -325,6 +325,20 @@ const initialSteps = [
 	{ id: 'payment_step', name: 'Payment', href: '#', status: 'upcoming' },
 ];
 
+const defaultShippingAddress = {
+	first_name: '',
+	last_name: '',
+	country: '',
+	state: '',
+	city: '',
+	postcode: '',
+	address_1: '',
+};
+
+const defaultBillingAddress = {
+	...defaultShippingAddress,
+	email: '',
+};
 export default function Checkout() {
 	const { needsShipping } = useCart();
 	const { push } = useRouter();
@@ -340,8 +354,8 @@ export default function Checkout() {
 	const {
 		placeOrder,
 		updateCheckout,
-		billing_address,
-		shipping_address,
+		billing_address = defaultBillingAddress,
+		shipping_address = defaultShippingAddress,
 		errors: checkoutErrors,
 	} = useCheckout();
 
@@ -379,6 +393,7 @@ export default function Checkout() {
 		<div className="lg:grid lg:grid-cols-12">
 			<Formik
 				validationSchema={ checkoutSchema[ currentStep ] }
+				enableReinitialize={ true }
 				initialValues={ {
 					billing_address,
 					shipping_address,

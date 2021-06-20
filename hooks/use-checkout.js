@@ -18,13 +18,10 @@ export const useCheckout = () => {
 				const [ stripe ] = await Emitter.emit( 'submit' );
 				await axios.post( 'checkout', {
 					billing_address: {
-						...checkout.billing_address,
-						...checkout.shipping_address,
 						...billing_address,
 						...shipping_address,
 					},
 					shipping_address: {
-						...checkout.shipping_address,
 						...shipping_address,
 					},
 					payment_data: stripe,
@@ -46,13 +43,10 @@ export const useCheckout = () => {
 		async ( { values: { billing_address, shipping_address } } ) => {
 			return axios.post( 'cart/update-customer', {
 				billing_address: {
-					...checkout.billing_address,
-					...checkout.shipping_address,
 					...billing_address,
 					...shipping_address,
 				},
 				shipping_address: {
-					...checkout.shipping_address,
 					...shipping_address,
 				},
 			} );
