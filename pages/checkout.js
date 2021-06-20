@@ -835,23 +835,3 @@ export default function Checkout() {
 		</div>
 	);
 }
-
-export async function getServerSideProps( { req } ) {
-	const queryClient = new QueryClient();
-	await queryClient.prefetchQuery( 'cart', () =>
-		axios
-			.get( 'cart', {
-				headers: { Cookie: req.headers.cookie },
-			} )
-			.then( ( { data } ) => data )
-	);
-	await queryClient.prefetchQuery( 'checkout', () =>
-		axios
-			.get( 'checkout', {
-				headers: { Cookie: req.headers.cookie },
-			} )
-			.then( ( { data } ) => data )
-	);
-
-	return { props: { dehydratedState: dehydrate( queryClient ) } };
-}
