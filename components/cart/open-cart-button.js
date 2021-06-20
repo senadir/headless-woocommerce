@@ -1,14 +1,16 @@
 import React from 'react';
 import { useCart } from '../../hooks';
+import { useApp } from '../app/context';
 import { ShoppingCartIcon } from '@heroicons/react/outline';
 
-export default function OpenCartButton( { setOpen } ) {
+export default function OpenCartButton() {
+	const { setCartIsOpen } = useApp();
 	const { itemsCount } = useCart();
 	return (
 		<div className="hidden sm:ml-6 sm:flex sm:items-center">
 			<button
 				className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 relative"
-				onClick={ () => setOpen( ( isOpen ) => ! isOpen ) }
+				onClick={ () => setCartIsOpen( ( isOpen ) => ! isOpen ) }
 			>
 				<span className="sr-only">View Cart</span>
 				{ !! itemsCount && (

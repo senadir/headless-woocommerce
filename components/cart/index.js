@@ -4,11 +4,13 @@ import { useRouter } from 'next/router';
 import { XIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import { useCart } from '../../hooks';
+import { useApp } from '../app/context';
 import Item from './item';
 import { formatPrice, getCurrencyFromPriceResponse } from '../../utils';
 
-export function Cart( { open, setOpen } ) {
-	const { items: cartItems, cartLoaded, totals, ...rest } = useCart();
+export function Cart() {
+	const { items: cartItems, cartLoaded, totals } = useCart();
+	const { cartIsOpen: open, setCartIsOpen: setOpen } = useApp();
 	const router = useRouter();
 	useEffect( () => {
 		const handleRouteChange = () => {
@@ -24,7 +26,7 @@ export function Cart( { open, setOpen } ) {
 		return () => {
 			router.events.off( 'routeChangeComplete', handleRouteChange );
 		};
-	}, [ open ] );
+	}, [ open, setOpen, router.events ] );
 
 	return (
 		<Transition.Root show={ open } as={ Fragment }>

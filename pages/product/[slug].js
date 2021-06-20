@@ -3,20 +3,17 @@ import { QueryClient, useQuery } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 import { Product } from '../../components';
 import { axios } from '../../utils';
+import { useApp } from '../../components/app/context';
 import classnames from 'classnames';
 export default function ProductPage() {
+	const { setCartIsOpen } = useApp();
+
 	const {
 		query: { slug },
 		isFallback,
 	} = useRouter();
-	const { data: product } = useQuery(
-		[ 'product', { slug } ],
-		async () =>
-			await (
-				await fetch(
-					`${ process.env.NEXT_PUBLIC_STORE_API }/products/${ slug }`
-				)
-			 ).json()
+	const { data: product } = useQuery( [ 'product', { slug } ], async () =>
+		axios.get( `/products/${ slug }` ).then( ( response ) => response.data )
 	);
 	if ( isFallback ) {
 		return 'Loading...';
@@ -52,7 +49,8 @@ export default function ProductPage() {
 							},
 						} }
 						onClick={ ( onClick ) =>
-							product.type === 'simple' && onClick()
+							product.type === 'simple' &&
+							onClick().then( () => setCartIsOpen( true ) )
 						}
 					/>
 				</div>

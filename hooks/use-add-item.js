@@ -3,7 +3,7 @@ import { axios } from '../utils';
 
 export const useAddItem = () => {
 	const queryClient = useQueryClient();
-	const { mutate: addItem, isLoading } = useMutation(
+	const { mutateAsync: addItem, isLoading } = useMutation(
 		( id, quantity = 1 ) =>
 			axios.post( 'cart/add-item', {
 				id,

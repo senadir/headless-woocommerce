@@ -130,7 +130,7 @@ const AddToCart = ( {
 	const { add_to_cart, id } = useProduct( override );
 	const { addItem, isLoading } = useAddItem();
 	const handleAddToCart = useCallback( () => {
-		addItem( id );
+		return addItem( id );
 	}, [ id, addItem ] );
 	return (
 		<button

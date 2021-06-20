@@ -4,8 +4,10 @@ import { useRouter } from 'next/router';
 import { dehydrate } from 'react-query/hydration';
 import { Product } from '../components';
 import Link from 'next/link';
+import { useApp } from '../components/app/context';
 
 export default function Home() {
+	const { setCartIsOpen } = useApp();
 	const { products } = useProducts();
 	const { push } = useRouter();
 	return (
@@ -36,7 +38,7 @@ export default function Home() {
 						className="text-sm font-medium text-gray-900 underline"
 						onClick={ ( onClick ) =>
 							product.type === 'simple'
-								? onClick()
+								? onClick().then( () => setCartIsOpen( true ) )
 								: push( `/product/${ product.slug }` )
 						}
 					/>
