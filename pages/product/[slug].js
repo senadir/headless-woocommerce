@@ -21,7 +21,6 @@ export default function ProductPage() {
 	if ( isFallback ) {
 		return 'Loading...';
 	}
-	console.log( product.type !== 'simple' );
 	return (
 		<Product product={ product } className="relative">
 			<div className="mx-auto max-w-7xl w-full pt-16 pb-20 text-center lg:py-48 lg:text-left">

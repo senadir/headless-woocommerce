@@ -26,7 +26,6 @@ const Stripe = () => {
 	const [ disabled, setDisabled ] = useState( true );
 	const queryClient = useQueryClient();
 	const [ clientSecret, setClientSecret ] = useState( () => {
-		console.log( queryClient.getQueryData( 'checkout' ) );
 		return queryClient.getQueryData( 'checkout' ).extensions[
 			'basic-stripe'
 		]?.client_secret;

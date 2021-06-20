@@ -48,7 +48,9 @@ export default function Home() {
 
 export async function getStaticProps() {
 	const queryClient = new QueryClient();
-	await queryClient.prefetchQuery( 'products', getProducts );
+	await queryClient.prefetchQuery( [ 'products', {} ], () =>
+		getProducts( { per_page: 0 } )
+	);
 	return {
 		props: {
 			dehydratedState: dehydrate( queryClient ),

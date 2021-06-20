@@ -12,7 +12,7 @@ export default function Home() {
 		query: { slug },
 		isFallback,
 	} = useRouter();
-	const { products } = useProducts( `category=${ slug[ 1 ] }` );
+	const { products } = useProducts( { category: slug[ 1 ] } );
 	const { push } = useRouter();
 	if ( ! products ) {
 		return null;
@@ -56,11 +56,10 @@ export default function Home() {
 }
 
 export async function getStaticProps( { params } ) {
-	console.log( params );
 	const queryClient = new QueryClient();
 	await queryClient.prefetchQuery(
 		[ 'products', { category: params.slug[ 1 ] } ],
-		() => getProducts( `category=${ params.slug[ 1 ] }` )
+		() => getProducts( { category: params.slug[ 1 ] } )
 	);
 	return {
 		props: {
@@ -71,9 +70,7 @@ export async function getStaticProps( { params } ) {
 
 export async function getStaticPaths() {
 	const { data: categories } = await axios.get( `products/categories` );
-	console.log(
-		categories.map( ( category ) => [ category.slug, category.id ] )
-	);
+
 	return {
 		paths: categories.map( ( category ) => ( {
 			params: { slug: [ category.slug, `${ category.id }` ] },

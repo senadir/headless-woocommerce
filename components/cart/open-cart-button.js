@@ -3,7 +3,7 @@ import { useCart } from '../../hooks';
 import { ShoppingCartIcon } from '@heroicons/react/outline';
 
 export default function OpenCartButton( { setOpen } ) {
-	const { items } = useCart();
+	const { itemsCount } = useCart();
 	return (
 		<div className="hidden sm:ml-6 sm:flex sm:items-center">
 			<button
@@ -11,9 +11,9 @@ export default function OpenCartButton( { setOpen } ) {
 				onClick={ () => setOpen( ( isOpen ) => ! isOpen ) }
 			>
 				<span className="sr-only">View Cart</span>
-				{ !! items?.length && (
+				{ !! itemsCount && (
 					<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 absolute -top-1">
-						{ items.length }
+						{ itemsCount }
 					</span>
 				) }
 				<ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
