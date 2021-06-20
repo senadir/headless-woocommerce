@@ -838,7 +838,13 @@ export default function Checkout() {
 
 export async function getServerSideProps( { req } ) {
 	const queryClient = new QueryClient();
-
+	await queryClient.prefetchQuery( 'cart', () =>
+		axios
+			.get( 'cart', {
+				headers: { Cookie: req.headers.cookie },
+			} )
+			.then( ( { data } ) => data )
+	);
 	await queryClient.prefetchQuery( 'checkout', () =>
 		axios
 			.get( 'checkout', {

@@ -7,17 +7,12 @@ export const useCart = () => {
 		data: cart,
 		isLoading: cartIsLoading,
 		isSuccess: cartLoaded,
-	} = useQuery( 'cart', getCart, {
-		refetchOnReconnect: false,
-		refetchOnWindowFocus: false,
-		refetchOnMount: false,
-		refetchIntervalInBackground: false,
-	} );
+	} = useQuery( 'cart', getCart );
 
 	return { ...camelCase( cart ), cartIsLoading, cartLoaded };
 };
 
 export const getCart = async () => {
-	const { data: cart } = await axios.get( `cart` );
+	const { data: cart } = await axios.get( 'cart' );
 	return cart;
 };
