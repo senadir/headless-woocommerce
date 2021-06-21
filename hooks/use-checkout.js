@@ -16,7 +16,7 @@ export const useCheckout = () => {
 		async ( { values: { billing_address, shipping_address } } ) => {
 			try {
 				const [ stripe ] = await Emitter.emit( 'submit' );
-				await axios.post( 'checkout', {
+				const { data } = await axios.post( 'checkout', {
 					billing_address: {
 						...billing_address,
 						...shipping_address,
@@ -27,14 +27,17 @@ export const useCheckout = () => {
 					payment_data: stripe,
 					payment_method: 'basic-stripe',
 				} );
+				return data;
 			} catch ( e ) {
 				console.log( e );
 			}
 		},
 		{
-			onSuccess: ( { data } ) => {
-				queryClient.setQueryData( 'checkout', data );
-				queryClient.removeQueries( 'cart' );
+			onSuccess: ( response ) => {
+				if ( response.data ) {
+					queryClient.setQueryData( 'checkout', response.data );
+					queryClient.removeQueries( 'cart' );
+				}
 			},
 		}
 	);
